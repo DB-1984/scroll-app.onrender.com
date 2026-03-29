@@ -1,0 +1,20 @@
+{% extends "scroll/base.html" %}
+
+{% block content %}
+<div class="max-w-2xl bg-white shadow-sm rounded-xl p-8">
+    <h2 class="text-2xl lg:text-6xl font-black tracking-tighter mb-12">
+        Labels</span>
+    </h2>
+
+    <div class="flex flex-wrap gap-3">
+        {% for label in labels %}
+        <a href="{% url 'index' %}?q={{ label.name }}"
+            class="text-[10px] font-bold uppercase tracking-widest bg-zinc-100 text-zinc-900 px-4 py-2 rounded hover:bg-black hover:text-white transition-all">
+            {{ label.name }}
+        </a>
+        {% empty %}
+        <p class="text-zinc-400 text-sm italic">No labels recorded in the scroll yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

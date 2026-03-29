@@ -1,0 +1,64 @@
+{% extends "scroll/base.html" %}
+{% block content %}
+<section class="mb-8">
+  <div
+    class="border-[0.5px] border-zinc-200 rounded-xl bg-white shadow-sm overflow-hidden focus-within:border-zinc-400 transition-all">
+    <form hx-post="{% url 'index' %}" hx-target="#timeline" hx-swap="afterbegin" hx-on::after-request="this.reset()">
+      {% csrf_token %}
+
+      <div class="flex gap-3 p-4">
+        <div class="mt-1 text-zinc-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 3.5-1 6.5-4.5 8.5" />
+            <path d="M15 21c3 0 7-1 7-8V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4c0 3.5-1 6.5-4.5 8.5" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          {{ entry_form.body }}
+          {% if entry_form.body.errors %}
+          <p class="text-[10px] text-red-500 mt-1 uppercase font-bold">{{ entry_form.body.errors.0 }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 px-4 py-2 border-t-[0.5px] border-zinc-100 bg-zinc-50/50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-400">
+          <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z" />
+          <path d="M7 7h.01" />
+        </svg>
+        <div class="flex-1">
+          {{ entry_form.label_name }}
+        </div>
+
+        <button type="submit"
+          class="text-xs font-black uppercase tracking-tighter text-[#1d1d1d] hover:text-zinc-900 transition-colors">
+          Post →
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="relative mt-8 group">
+    <div
+      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-300 group-focus-within:text-zinc-500 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="#1d1d1d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    </div>
+    <input type="text" name="q" placeholder="Search entries..." hx-get="{% url 'index' %}"
+      hx-trigger="keyup changed delay:300ms" hx-target="#timeline"
+      class="pl-10 pr-4 shadow-sm rounded-xl bg-white py-3 text-sm bg-white border-zinc-100 outline-none w-full focus:border-zinc-400 transition-all placeholder:text-zinc-400" />
+  </div>
+</section>
+
+<div class="relative">
+  <div class="absolute left-2 top-0 bottom-0 w-px"></div>
+  <div id="timeline" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% include 'scroll/entry_list_partial.html' %}
+  </div>
+</div>
+{% endblock %}

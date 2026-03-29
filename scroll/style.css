@@ -1,0 +1,19 @@
+/* Custom "Zinc" Accents */
+.entry-container {
+    transition: all 0.4s ease;
+}
+
+/* HTMX "Swapping" States */
+.htmx-swapping {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+/* Custom Scrollbar for that minimal look */
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: #e4e4e7; /* zinc-200 */
+    border-radius: 5px;
+}

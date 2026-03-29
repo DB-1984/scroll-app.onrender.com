@@ -1,0 +1,59 @@
+{% extends "scroll/base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow-sm rounded-xl p-4 py-12">
+
+    {% load socialaccount %}
+
+    <div class="flex flex-col items-center justify-center mb-8">
+        <h2 class="text-zinc-400 uppercase tracking-widest text-xs mb-8">Authentication</h2>
+
+        <a href="{% provider_login_url 'google' %}"
+            class="w-full px-6 py-3 border border-zinc-200 hover:bg-zinc-50 transition-colors rounded-sm text-sm font-medium flex items-center justify-center gap-3">
+            <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google Logo">
+            Continue with Google
+        </a>
+    </div>
+    <!-- SPECIFIC FOR ALLAUTH -->
+    <form method="post" action="{% url 'account_login' %}" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-zinc-700 mb-2">Username</label>
+                <!-- SPECIFIC FOR ALLAUTH -->
+                <input type="text" name="login" autofocus required
+                    class="w-full bg-zinc-100 border-0 rounded-sm p-3 text-zinc-800 focus:ring-2 focus:ring-zinc-900 transition outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-zinc-700 mb-2">Password</label>
+                <input type="password" name="password" required
+                    class="w-full bg-zinc-100 border-0 rounded-sm p-3 text-zinc-800 focus:ring-2 focus:ring-zinc-900 transition outline-none">
+            </div>
+        </div>
+
+        {% if form.errors %}
+        <p class="text-xs text-red-500 font-medium">Invalid username or password. Try again.</p>
+        {% endif %}
+
+        <button type="submit"
+            class="w-full bg-zinc-900 text-white font-bold py-4 rounded-sm hover:bg-black transition-all shadow-lg shadow-zinc-200">
+            Enter →
+        </button>
+    </form>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'account_signup' %}"
+            class="text-xs text-zinc-400 hover:text-zinc-900 transition underline decoration-zinc-200 underline-offset-4">
+            Need an account? Join Scroll.
+        </a>
+        <div class="flex items-center justify-between mt-8">
+            <a href="{% url 'account_reset_password' %}"
+                class="text-xs font-semibold text-zinc-400 hover:text-zinc-900 transition-colors">
+                Forgot Password?
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

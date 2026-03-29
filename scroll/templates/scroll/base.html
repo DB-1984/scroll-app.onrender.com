@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll.</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    /* Custom scrollbar for the drawer */
+    #side-drawer::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #side-drawer::-webkit-scrollbar-thumb {
+      background: #e4e4e7;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-white font-sans">
+  <div class="fixed inset-0 -z-10 overflow-hidden bg-[#f3f2ef]">
+    <svg class="absolute inset-0 w-full h-full opacity-[0.05] pointer-events-none">
+      <filter id="static-grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="1" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#static-grain)" />
+    </svg>
+  
+    <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <g fill="none" stroke-width="3" stroke-linecap="butt" class="flex-ribbon">
+        
+        <path class="line-1" stroke="#1a1a1a" d="M-10,35 Q30,25 50,45 T110,55" />
+        <path class="line-2" stroke="#2b6cb0" d="M-10,38 Q30,28 50,48 T110,58" />
+        <path class="line-3" stroke="#e65100" d="M-10,41 Q30,31 50,51 T110,61" />
+        
+        <path class="line-4" stroke="#ffffff" d="M-10,44 Q30,34 50,54 T110,64" />
+        
+        <path class="line-5" stroke="#3f3f46" d="M-10,47 Q30,37 50,57 T110,67" />
+        <path class="line-6" stroke="#2f7eaf" d="M-10,50 Q30,40 50,60 T110,70" />
+        <path class="line-7" stroke="#f99201" d="M-10,53 Q30,43 50,63 T110,73" />
+  
+        <path class="line-8" stroke="#1a1a1a" d="M-10,56 Q30,46 50,66 T110,76" />
+        <path class="line-9" stroke="#334155" d="M-10,59 Q30,49 50,69 T110,79" />
+        <path class="line-10" stroke="#a8a29e" d="M-10,62 Q30,52 50,72 T110,82" />
+        <path class="line-11" stroke="#e65100" d="M-10,65 Q30,55 50,75 T110,85" />
+  
+      </g>
+    </svg>
+  </div>
+  
+  <div id="menu-backdrop" onclick="toggleMenu()"
+    class="fixed inset-0 bg-black/5 backdrop-blur-[2px] z-40 hidden transition-opacity duration-300 opacity-0"></div>
+
+  <div id="side-drawer"
+    class="fixed top-0 right-0 h-full w-72 md:w-80 bg-white border-l border-zinc-100 z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl p-8 flex flex-col">
+
+    <button onclick="toggleMenu()" class="self-end p-3 -m-3 group focus:outline-none mb-12" aria-label="Close Menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 40 40" fill="none">
+        
+        <line x1="10" y1="10" x2="30" y2="30" 
+              stroke="#2b6cb0" 
+              stroke-width="6" 
+              stroke-linecap="butt"
+              class="transition-all duration-300 group-hover:rotate-12 origin-center" />
+        
+        <line x1="30" y1="10" x2="10" y2="30" 
+              stroke="#e65100" 
+              stroke-width="6" 
+              stroke-linecap="butt"
+              class="transition-all duration-300 delay-75 group-hover:-rotate-12 origin-center" />
+              
+      </svg>
+    </button>
+
+    {% if user.is_authenticated %}
+    <div class="flex items-center gap-4 mb-10">
+      {% if user.socialaccount_set.all.0 %}
+      <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+        class="w-10 h-10 rounded-full grayscale hover:grayscale-0 transition-all">
+      {% else %}
+      <div
+        class="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+        {{ user.username|slice:":1" }}
+      </div>
+      {% endif %}
+      <div class="flex flex-col">
+        <span class="text-xs font-black text-zinc-900 uppercase tracking-tighter">{{ user.username }}</span>
+        <span class="text-[10px] text-zinc-400 font-mono">{{ user.email }}</span>
+      </div>
+    </div>
+
+    <nav class="flex flex-col gap-8 flex-grow">
+      <div class="flex flex-col gap-1">
+        <span class="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.2em] mb-2">Navigation</span>
+        <a href="{% url 'index' %}"
+          class="group flex items-center justify-between mb-4 text-2xl font-black tracking-tighter text-zinc-900 transition-all">
+          Home
+        </a>
+        <a href="{% url 'labels' %}"
+          class="group flex items-center justify-between text-2xl font-black tracking-tighter text-zinc-900 transition-all">
+          Labels
+        </a>
+      </div>
+    </nav>
+
+    <div class="mt-auto pt-8 border-t border-zinc-100">
+      <form action="{% url 'account_logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit"
+          class="text-[10px] font-bold text-zinc-400 hover:text-red-500 uppercase tracking-widest transition-colors">
+          End Session →
+        </button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="max-w-2xl mx-auto py-4 px-4 lg:px-12 py-8 rounded-sm">
+    <header class="mb-14 flex justify-between items-start">
+      <h1 class="text-7xl md:text-9xl lg:text-9xl font-black tracking-tighter text-zinc-900">
+        {% if user.is_authenticated %}
+        <a href="{% url 'index' %}">Scroll<span class="inline-block animate-pulse text-zinc-400">.</span></a>
+        {% else %}
+        <a href="{% url 'index' %}">Sign in<span class="inline-block animate-pulse text-zinc-400">.</span></a>
+        {% endif %}
+      </h1>
+
+  {% if user.is_authenticated %}
+  <button onclick="toggleMenu()" class="mt-4 p-2 -m-2 group focus:outline-none" aria-label="Menu" aria-haspopup="true">
+    <div class="relative w-8 h-8">
+      
+      <svg class="absolute inset-0 w-full h-full block group-aria-expanded:hidden" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        
+        <path d="M4 10H36" stroke="#1a1a1a" stroke-width="6" stroke-linecap="butt" class="transition-all duration-300 group-hover:translate-x-1" />
+              
+        <path d="M4 20H36" stroke="#2b6cb0" stroke-width="6" stroke-linecap="butt" class="transition-all duration-300 delay-75 group-hover:-translate-x-1" />
+              
+        <path d="M4 30H36" stroke="#e65100" stroke-width="6" stroke-linecap="butt" class="transition-all duration-300 delay-150 group-hover:translate-x-1" />
+      </svg>
+      
+      
+      <svg class="absolute inset-0 w-full h-full hidden group-aria-expanded:block transition-all duration-300 text-zinc-400 group-hover:text-[#2b6cb0]" 
+           xmlns="http://www.w3.org/2000/svg" 
+           viewBox="0 0 24 24" 
+           fill="none" 
+           stroke="currentColor" 
+           stroke-width="2.5" 
+           stroke-linecap="round" 
+           stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+      
+    </div>
+  </button>
+{% endif %}
+    </header>
+
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const drawer = document.getElementById('side-drawer');
+      const backdrop = document.getElementById('menu-backdrop');
+
+      const isOpen = !drawer.classList.contains('translate-x-full');
+
+      if (!isOpen) {
+        // Open the menu
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('hidden');
+        // Small delay to trigger the CSS opacity transition
+        setTimeout(() => backdrop.classList.add('opacity-100'), 10);
+        document.body.classList.add('overflow-hidden'); // Prevent background scroll
+      } else {
+        // Close the menu
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.remove('opacity-100');
+        document.body.classList.remove('overflow-hidden');
+        // Wait for transition before hiding backdrop
+        setTimeout(() => backdrop.classList.add('hidden'), 300);
+      }
+    }
+  </script>
+</body>
+
+</html>
