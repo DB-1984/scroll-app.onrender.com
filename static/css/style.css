@@ -1,0 +1,31 @@
+.serif-italic {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 900;
+}
+
+.bg-retro-spectrum {
+  /* Step 2: The Stripes */
+  background-image: linear-gradient(
+    45deg,
+    transparent 20%,
+    #ef8e1d 20%,
+    #ef8e1d 23%,
+    /* Orange */ transparent 23%,
+    transparent 24%,
+    #db3e26 24%,
+    #db3e26 27%,
+    /* Red */ transparent 27%,
+    transparent 28%,
+    #25588f 28%,
+    #25588f 31%,
+    /* Mid Blue */ transparent 31%,
+    transparent 32%,
+    #102c54 32%,
+    #102c54 35%,
+    /* Deep Navy */ transparent 35%
+  );
+
+  /* Step 3: Ensure it covers the full viewport */
+  background-size: cover;
+}
