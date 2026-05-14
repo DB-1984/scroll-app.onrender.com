@@ -37,7 +37,7 @@
     class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-300"></div>
 
   <aside id="side-drawer"
-    class="fixed inset-y-0 left-0 w-64 bg-white/90 p-8 shadow-lg flex flex-col z-50 transform -translate-x-full lg:translate-x-0">
+    class="fixed inset-y-0 left-0 w-128 bg-white/90 p-8 shadow-lg flex flex-col z-50 transform -translate-x-full lg:translate-x-0">
     <div class="mb-12 flex items-center gap-2">
       <h1 class="text-3xl tracking-tighter text-black font-black">Scroll</h1>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -46,7 +46,7 @@
           d="M2 4a2 2 0 0 1 2-2h8a2 2 0 1 1 0 4H4a2 2 0 0 1-2-2ZM2 9.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 9.25ZM2.75 12.5a.75.75 0 0 0 0 1.5h10.5a.75.75 0 0 0 0-1.5H2.75Z" />
       </svg>
     </div>
-    <nav class="flex-grow space-y-5">
+    <nav class="flex-grow space-y-6">
       <a href="{% url 'index' %}"
         class="group flex items-center gap-2 transition-all duration-300 
                {% if request.resolver_match.url_name == 'index' %}font-black text-black{% else %}font-semibold text-black/70 hover:text-black{% endif %}">
@@ -71,6 +71,19 @@
 
         <span class="text-sm tracking-tight">Labels</span>
       </a>
+      <div class="relative group mt-4">
+        <div
+            class="absolute inset-y-0 left-0 flex items-center pointer-events-none text-zinc-600 group-focus-within:text-zinc-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+            </svg>
+        </div>
+        <input type="text" name="q" placeholder="Search..." hx-get="{% url 'index' %}"
+            hx-trigger="keyup changed delay:300ms" hx-target="#timeline"
+            class="pl-6 pr-4 bg-white/90 shadow-sm rounded border-slate-700 py-3 text-xs md:text-sm text-zinc-950 w-full focus:border-zinc-700 transition-all outline-none placeholder:text-black-40" />
+    </div>
     </nav>
 
     <div class="mt-auto border-t border-zinc-100 pt-6">
@@ -114,7 +127,7 @@
     </div>
   </aside>
 
-  <main class="p-8 lg:ml-64 p-4 md:p-12 min-h-screen">
+  <main class="p-8 lg:ml-64 p-4 bg-gradient-to-r from-zinc-50 via-gray-100 to-stone-100 md:p-12 min-h-screen">
     <div class="max-w-screen mx-auto 
     flex flex-row flex-wrap justify-center items-start 
     md:flex-nowrap 
